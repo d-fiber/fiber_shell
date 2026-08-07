@@ -1,0 +1,29 @@
+name: fiber_shell
+description: >-
+  Typed shell command builder for Dart and Flutter desktop: CLI tools wrapped as
+  classes, with pipes, chaining and elevation run in Dart instead of through a
+  shell.
+version: 1.0.0
+homepage: https://github.com/d-fiber/fiber_shell
+repository: https://github.com/d-fiber/fiber_shell
+
+topics:
+  - shell
+  - process
+  - cli
+  - command-line
+  - desktop
+
+platforms:
+  linux:
+  macos:
+  windows:
+
+environment:
+  sdk: ^3.12.2
+
+dev_dependencies:
+  build_runner: ^2.16.0
+  lints: ^6.0.0
+  mockito: ^5.8.1
+  test: ^1.25.6

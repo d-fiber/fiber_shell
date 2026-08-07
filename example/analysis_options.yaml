@@ -1,0 +1,6 @@
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    # The tour is a command-line program whose whole job is to print what it did.
+    avoid_print: false

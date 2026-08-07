@@ -1,0 +1,14 @@
+name: fiber_shell_example
+description: A runnable, chapter-by-chapter tour of the fiber_shell API.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  fiber_shell:
+    path: ../
+
+dev_dependencies:
+  lints: ^6.0.0
