@@ -171,47 +171,60 @@ job it does. It grows as needs come up.
 | Group | Family | Tools |
 |-------|--------|-------|
 | `common/` | `archives/` | tar |
-| `common/` | `containers/` | docker, docker compose |
-| `common/` | `databases/` | pg_dump, pg_restore, psql |
+| `common/` | `containers/` | docker, docker compose, helm, kubectl |
+| `common/` | `databases/` | mysql, pg_dump, pg_restore, psql |
 | `common/` | `env/` | direnv |
-| `common/` | `infrastructure/` | tofu |
-| `common/` | `network/` | curl, jq |
+| `common/` | `infrastructure/` | ansible-playbook, terraform, tofu |
+| `common/` | `network/` | curl, jq, wget, yq |
 | `common/` | `remote/` | scp, ssh, ssh-keygen |
-| `common/` | `runtimes/` | bun, deno, npm, python3 |
-| `common/` | `security/` | openssl |
+| `common/` | `runtimes/` | bun, deno, node, npm, pip, python3 |
+| `common/` | `security/` | gpg, openssl |
 | `common/` | `vcs/` | gh, git |
-| `unix/` | `filesystem/` | cp, du, find, install, ln, mkdir, rm |
+| `unix/` | `filesystem/` | cp, du, find, install, ln, mkdir, rm, touch |
 | `unix/` | `permissions/` | chmod, chown |
 | `unix/` | `pipeline/` | tee, xargs |
 | `unix/` | `process/` | kill, lsof, ps |
 | `unix/` | `shell/` | bash, sh |
-| `unix/` | `text/` | awk, grep, sed |
+| `unix/` | `system/` | df, uptime |
+| `unix/` | `text/` | awk, cat, diff, grep, head, sed, sort, tail, uniq, wc |
 | `unix/` | `transfer/` | rsync |
 | `linux/` | `firewall/` | iptables, ufw |
-| `linux/` | `hardware/` | lscpu, nproc |
-| `linux/` | `networking/` | ip, ss, wg |
+| `linux/` | `hardware/` | free, lscpu, nproc |
+| `linux/` | `kernel/` | dmesg, lsmod, modprobe |
+| `linux/` | `networking/` | ip, nmcli, ss, wg |
 | `linux/` | `package_managers/` | apk, apt-get, dnf, pacman |
-| `linux/` | `services/` | journalctl, systemctl |
-| `linux/` | `system/` | secret-tool, sysctl, usermod |
+| `linux/` | `services/` | crontab, journalctl, systemctl |
+| `linux/` | `storage/` | lsblk, mount |
+| `linux/` | `system/` | groupadd, secret-tool, sysctl, useradd, usermod |
+| `macos/` | `apps/` | open |
+| `macos/` | `automation/` | osascript |
+| `macos/` | `developer/` | xcode-select, xcrun |
 | `macos/` | `networking/` | networksetup, scutil |
 | `macos/` | `package_managers/` | brew |
 | `macos/` | `power/` | caffeinate, pmset |
+| `macos/` | `search/` | mdfind, mdls |
+| `macos/` | `security/` | codesign |
 | `macos/` | `services/` | launchctl |
-| `macos/` | `storage/` | diskutil |
-| `macos/` | `system/` | defaults, dscl, plutil, security, softwareupdate, sysctl |
-| `windows/` | `filesystem/` | robocopy |
-| `windows/` | `networking/` | netsh |
+| `macos/` | `storage/` | diskutil, tmutil |
+| `macos/` | `system/` | defaults, dscl, plutil, security, softwareupdate, spctl, sysctl, system_profiler |
+| `windows/` | `eventlog/` | wevtutil |
+| `windows/` | `filesystem/` | attrib, robocopy, xcopy |
+| `windows/` | `networking/` | ipconfig, netsh, netstat |
 | `windows/` | `package_managers/` | scoop, winget |
 | `windows/` | `permissions/` | icacls |
+| `windows/` | `power/` | shutdown |
 | `windows/` | `process/` | taskkill, tasklist |
 | `windows/` | `registry/` | reg |
+| `windows/` | `security/` | certutil |
 | `windows/` | `services/` | sc, schtasks |
 | `windows/` | `shell/` | cmd, powershell |
+| `windows/` | `system/` | driverquery, systeminfo, whoami |
 
 Every wrapper carries its own documentation: the traps of the tool, which
 platform it exists on, and which options bite in automation. Read the class
-comment before reaching for a flag: `security`, `dscl`, `netsh` and `launchctl`
-in particular have surprises worth knowing about first.
+comment before reaching for a flag: `security`, `dscl`, `netsh`, `launchctl`,
+`shutdown`, `attrib`, `certutil` and `wevtutil` in particular have surprises
+worth knowing about first.
 
 Two helpers for the tools that may not be there at all:
 

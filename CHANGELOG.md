@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.2.0
+
+- Fifty new wrappers, ten per platform group:
+  - `common/`: `AnsiblePlaybook` (`ansible-playbook`), `Gpg` (`gpg`), `Helm`
+    (`helm`), `Kubectl` (`kubectl`), `Mysql` (`mysql`), `Node` (`node`), `Pip`
+    (`pip3`), `Terraform` (`terraform`), `Wget` (`wget`), `Yq` (`yq`).
+  - `unix/`: `Cat`, `Df`, `Diff`, `Head`, `Sort`, `Tail`, `Touch`, `Uniq`,
+    `Uptime`, `Wc` — `df` and `uptime` open a new `system/` family.
+  - `linux/`: `Crontab`, `Dmesg`, `Free`, `Groupadd`, `Lsblk`, `Lsmod`,
+    `Modprobe`, `Mount`, `Nmcli`, `Useradd` — `storage/` (`lsblk`, `mount`)
+    and `kernel/` (`dmesg`, `lsmod`, `modprobe`) are new families.
+  - `macos/`: `Codesign`, `Mdfind`, `Mdls`, `Open`, `Osascript`, `Spctl`,
+    `SystemProfiler`, `Tmutil`, `XcodeSelect`, `Xcrun` — `search/`
+    (`mdfind`, `mdls`), `apps/` (`open`), `automation/` (`osascript`),
+    `developer/` (`xcode-select`, `xcrun`) and a `security/` family
+    (`codesign`, distinct from `common/security/`) are new.
+  - `windows/`: `Attrib`, `Certutil`, `Driverquery`, `Ipconfig`, `Netstat`,
+    `Shutdown`, `Systeminfo`, `Whoami`, `Wevtutil`, `Xcopy` — `system/`
+    (`systeminfo`, `whoami`, `driverquery`), `power/` (`shutdown`),
+    `security/` (`certutil`) and `eventlog/` (`wevtutil`) are new families.
+- As with 1.1.0, the barrel is the only public surface and every new wrapper
+  follows the same shape: one method per documented option, verified against
+  the tool's own manual rather than guessed at.
+
 ## 1.1.0
 
 - Licensed under the Mozilla Public License 2.0, replacing the all-rights-reserved
