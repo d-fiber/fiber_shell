@@ -1,0 +1,102 @@
+name: promote
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version on dev you are putting on main, as three numbers.
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promote
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check who asked
+        env:
+          ASKED_BY: ${{ github.actor }}
+          OWNER: ${{ vars.PROMOTER || 'daf-ep' }}
+        run: |
+          set -eu
+          if [ "$ASKED_BY" != "$OWNER" ]; then
+            echo "$ASKED_BY asked to promote, and only $OWNER decides that. Nothing was moved." >&2
+            exit 1
+          fi
+          echo "asked by $ASKED_BY"
+
+      - name: Check that the key this needs is here
+        env:
+          KEY: ${{ secrets.PROMOTE_PUSH_KEY }}
+        run: |
+          set -eu
+          [ -n "$KEY" ] && exit 0
+
+          echo "PROMOTE_PUSH_KEY is not set on this repository, and nothing can move without it." >&2
+          echo "" >&2
+          echo "It is the private half of the deploy key named \"promote push\", which the" >&2
+          echo "ruleset lets through to main. Without it the push is refused like anybody else's." >&2
+          echo "" >&2
+          echo "Nothing was moved." >&2
+          exit 1
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: dev
+          fetch-depth: 0
+          ssh-key: ${{ secrets.PROMOTE_PUSH_KEY }}
+
+      - name: Check that dev holds the version you named
+        env:
+          ASKED: ${{ inputs.version }}
+        run: |
+          set -eu
+          held=$(awk '/^version:/ { print $2; exit }' pubspec.yaml)
+          if [ "$held" != "$ASKED" ]; then
+            echo "dev holds $held, and you asked for $ASKED. Nothing was moved." >&2
+            exit 1
+          fi
+          if git rev-parse "v$held" >/dev/null 2>&1; then
+            echo "v$held already exists, so this version was promoted before. Nothing was moved." >&2
+            exit 1
+          fi
+
+      - name: Put dev on main
+        env:
+          ASKED: ${{ inputs.version }}
+        run: |
+          set -eu
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+          if git rev-parse --verify origin/main >/dev/null 2>&1; then
+            git checkout main
+            git merge origin/dev -m "Merge dev into main for $ASKED"
+          else
+            git checkout -b main
+          fi
+
+          git push origin main
+
+      - name: Name this commit after the version, since it just became public
+        run: bash .github/version/tag.sh
+
+      - name: Point dev back at main
+        run: |
+          set -eu
+          if git push origin HEAD:dev; then
+            exit 0
+          fi
+
+          echo "main now holds the version, but dev could not be moved onto it." >&2
+          echo "" >&2
+          echo "Something reached dev while this promotion was running, so dev is no longer" >&2
+          echo "an ancestor of what main holds. Nothing is lost: settle dev, then push it onto" >&2
+          echo "main by hand once, the way this job just did." >&2
+          exit 1
