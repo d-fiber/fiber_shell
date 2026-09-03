@@ -124,7 +124,7 @@ mixin PipeStage on ShellScript {
     final List<Process> running = await _spawn(stages, cwd, env);
     final Future<List<int>> out = collectBytes(running.last.stdout);
     final List<Future<List<int>>> errors = running.map((Process process) => collectBytes(process.stderr)).toList();
-    unawaited(running.first.stdin.close());
+    unawaited(_closeQuietly(running.first));
     return BackgroundJob(running, () async {
       final List<int> codes = await Future.wait(running.map((Process process) => process.exitCode));
       return ShellResult(
@@ -240,7 +240,7 @@ class Pipeline extends ShellScript with PipeStage {
       _forward(running.last.stdout, stdout),
       for (final Process process in running) _forward(process.stderr, stderr),
     ];
-    await running.first.stdin.close();
+    await _closeQuietly(running.first);
     final List<int> codes = await Future.wait(running.map((Process process) => process.exitCode));
     await Future.wait(forwarded);
     _failOn(codes);
@@ -252,8 +252,7 @@ class Pipeline extends ShellScript with PipeStage {
     final List<Process> running = await _spawn(stages, cwd, env);
     final Future<List<int>> out = collectBytes(running.last.stdout);
     final List<Future<List<int>>> errors = running.map((Process process) => collectBytes(process.stderr)).toList();
-    if (input != null) running.first.stdin.write(input);
-    await running.first.stdin.close();
+    await _closeQuietly(running.first, input: input);
     final List<int> codes = await Future.wait(running.map((Process process) => process.exitCode));
     return ShellResult(
       command: line,
@@ -270,7 +269,7 @@ class Pipeline extends ShellScript with PipeStage {
     final List<Future<void>> forwarded = <Future<void>>[
       for (final Process process in running) _forward(process.stderr, stderr),
     ];
-    await running.first.stdin.close();
+    await _closeQuietly(running.first);
     await running.last.stdout.pipe(dest.openWrite());
     final List<int> codes = await Future.wait(running.map((Process process) => process.exitCode));
     await Future.wait(forwarded);
@@ -300,6 +299,22 @@ Future<List<Process>> _spawn(List<ShellCommand> stages, String? cwd, Map<String,
 
 /// The rightmost non-zero status in [codes], or zero when there is none.
 int _pipefail(List<int> codes) => codes.lastWhere((int code) => code != 0, orElse: () => 0);
+
+/// Writes [input] to [process]'s stdin, if given, and closes it.
+///
+/// A process that exits without reading all of [input] closes its end of the
+/// pipe first, and the write then fails with a broken-pipe error. That is
+/// swallowed here for the same reason [_spawn] swallows one between two
+/// stages: the shell drops SIGPIPE on the floor too, and the exit code this
+/// process returns already says what it made of its input.
+Future<void> _closeQuietly(Process process, {String? input}) async {
+  try {
+    if (input != null) process.stdin.write(input);
+    await process.stdin.close();
+  } on Object {
+    // Handled by the exit code the caller already reads.
+  }
+}
 
 /// Copies [from] into [to] without closing it, completing when the source runs
 /// dry.

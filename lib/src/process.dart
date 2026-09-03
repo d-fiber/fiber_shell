@@ -85,6 +85,11 @@ Future<ProcessResult> capture(String executable, List<String> args, {String? cwd
 ///
 /// Both streams are decoded as UTF-8, so this only suits commands that speak
 /// text. For a secret handed over on stdin, see `CommandBuilder.output`.
+///
+/// A command that exits without reading all of [input] closes its end of the
+/// pipe first, and the write fails with a broken-pipe error that is not this
+/// call's to report: the exit code it returns already says what the process
+/// made of its input.
 Future<ProcessResult> captureWithStdin(
   String executable,
   List<String> args,
@@ -93,8 +98,12 @@ Future<ProcessResult> captureWithStdin(
   Map<String, String>? env,
 }) async {
   final Process process = await Process.start(executable, args, workingDirectory: cwd, environment: env);
-  process.stdin.write(input);
-  await process.stdin.close();
+  try {
+    process.stdin.write(input);
+    await process.stdin.close();
+  } on Object {
+    // Handled by the exit code the caller already reads below.
+  }
   final String stdout = await process.stdout.transform(utf8.decoder).join();
   final String stderr = await process.stderr.transform(utf8.decoder).join();
   final int code = await process.exitCode;
@@ -240,6 +249,13 @@ String commandLine(ShellCommand command) => [command.executable, ...command.args
 /// Both streams start draining before the exit code is awaited. Doing it the
 /// other way round deadlocks the moment a command writes more than the pipe
 /// buffer holds and then sits there waiting for somebody to read it.
+///
+/// A command that exits without reading all of [input] closes its end of the
+/// pipe first, and the write then fails with a broken-pipe error. That is
+/// answered by the exit code this returns as [ShellResult.exitCode], not by
+/// throwing out of a call [ShellResult] promises never throws: the process
+/// already said what it thought of its input, and this only stops that from
+/// racing a low-level stream error.
 Future<ShellResult> captureResult(
   ShellCommand command, {
   String? cwd,
@@ -252,8 +268,12 @@ Future<ShellResult> captureResult(
   final Process process = await Process.start(argv.first, argv.sublist(1), workingDirectory: cwd, environment: env);
   final Future<List<int>> out = collectBytes(process.stdout);
   final Future<List<int>> err = collectBytes(process.stderr);
-  if (input != null) process.stdin.write(input);
-  await process.stdin.close();
+  try {
+    if (input != null) process.stdin.write(input);
+    await process.stdin.close();
+  } on Object {
+    // Handled by the exit code the caller already reads below.
+  }
   final int code = await process.exitCode;
   return ShellResult(
     command: argv.join(' '),
