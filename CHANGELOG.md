@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.0
+
+- Licensed under the Mozilla Public License 2.0, replacing the all-rights-reserved
+  header every file carried in 1.0.0.
+- Thirteen new wrappers, one per tool: `Gh` (`gh`), `Bun` (`bun`) and `Tofu`
+  (`tofu`) in `common/`; `Rsync` (`rsync`) in `unix/`; `Nproc` (`nproc`),
+  `Lscpu` (`lscpu`), `Dnf` (`dnf`), `Pacman` (`pacman`) and `Apk` (`apk`) in
+  `linux/`; `DarwinSysctl` (`sysctl`) and `Brew` (`brew`) in `macos/`;
+  `Winget` (`winget`) and `Scoop` (`scoop`) in `windows/`. `DarwinSysctl` is a
+  separate wrapper from `Sysctl`: the same command name, but a different
+  program with a different flag grammar on macOS than on Linux.
+- `lib/src/commands/` is now grouped in two levels, platform then family
+  (`linux/package_managers/dnf.dart`, `unix/text/grep.dart`, and so on),
+  rather than one flat directory per platform. The barrel is the only public
+  surface and its exports are unchanged, so this does not affect a caller
+  that only ever does `import 'package:fiber_shell/fiber_shell.dart';`.
+
 ## 1.0.0
 
 First release.

@@ -1,103 +1,123 @@
 // Copyright (C) 2026 Fiber
 //
-// All rights reserved. This script, including its code and logic, is the
-// exclusive property of Fiber. Redistribution, reproduction,
-// or modification of any part of this script is strictly prohibited
-// without prior written permission from Fiber.
+// This Source Code Form is subject to the terms of the Mozilla Public License,
+// v. 2.0. If a copy of the MPL was not distributed with this file, You can
+// obtain one at https://mozilla.org/MPL/2.0/.
 //
-// Conditions of use:
-// - The code may not be copied, duplicated, or used, in whole or in part,
-//   for any purpose without explicit authorization.
-// - Redistribution of this code, with or without modification, is not
-//   permitted unless expressly agreed upon by Fiber.
-// - The name "Fiber" and any associated branding, logos, or
-//   trademarks may not be used to endorse or promote derived products
-//   or services without prior written approval.
+// What you may do:
+// - Use this software for any purpose, including commercially, and build and
+//   sell your own products on top of it.
+// - Change it, and create new works based on it.
+// - Distribute copies of it, with or without your changes.
+// - Combine it with files under any other licence, proprietary ones included,
+//   and licence that larger work on your own terms.
+//
+// What you must do in return:
+// - Keep this notice on every file you received it on.
+// - Publish, under these same terms, the source of every file covered by them
+//   that you distribute, including the ones you changed, so that whoever
+//   receives your version can obtain that source.
+// - Leave Fiber out of it: the name "Fiber", its branding, its logos and its
+//   trademarks may not be used to endorse or promote what you build, and this
+//   licence grants no right to them.
 //
 // Disclaimer:
-// THIS SCRIPT AND ITS CODE ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL
-// FIBER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF USE,
-// DATA, PROFITS, OR BUSINESS INTERRUPTION) ARISING OUT OF OR RELATED TO THE USE
-// OR INABILITY TO USE THIS SCRIPT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// AS FAR AS THE LAW ALLOWS, THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY
+// OR CONDITION OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+// NON-INFRINGEMENT. IN NO EVENT SHALL FIBER BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT
+// LIMITED TO LOSS OF USE, DATA, PROFITS, OR BUSINESS INTERRUPTION) ARISING OUT
+// OF OR RELATED TO THESE TERMS OR THE USE OR NATURE OF THE SOFTWARE, UNDER ANY
+// KIND OF LEGAL CLAIM.
 //
-// Unauthorized copying or reproduction of this script, in whole or in part,
-// is a violation of applicable intellectual property laws and will result
-// in legal action.
+// This header is a summary written for convenience. Where it differs from the
+// LICENSE file, the LICENSE file governs.
 
 library;
 
 export 'src/builder.dart';
-export 'src/commands/common/curl.dart';
-export 'src/commands/common/deno.dart';
-export 'src/commands/common/direnv.dart';
-export 'src/commands/common/docker.dart';
-export 'src/commands/common/docker_compose.dart';
-export 'src/commands/common/git.dart';
-export 'src/commands/common/jq.dart';
-export 'src/commands/common/npm.dart';
-export 'src/commands/common/openssl.dart';
-export 'src/commands/common/pg_dump.dart';
-export 'src/commands/common/pg_restore.dart';
-export 'src/commands/common/psql.dart';
-export 'src/commands/common/python3.dart';
-export 'src/commands/common/scp.dart';
-export 'src/commands/common/ssh.dart';
-export 'src/commands/common/ssh_keygen.dart';
-export 'src/commands/common/tar.dart';
-export 'src/commands/linux/apt_get.dart';
-export 'src/commands/linux/ip.dart';
-export 'src/commands/linux/iptables.dart';
-export 'src/commands/linux/journalctl.dart';
-export 'src/commands/linux/secret_tool.dart';
-export 'src/commands/linux/ss.dart';
-export 'src/commands/linux/sysctl.dart';
-export 'src/commands/linux/systemctl.dart';
-export 'src/commands/linux/ufw.dart';
-export 'src/commands/linux/usermod.dart';
-export 'src/commands/linux/wg.dart';
-export 'src/commands/macos/caffeinate.dart';
-export 'src/commands/macos/defaults.dart';
-export 'src/commands/macos/diskutil.dart';
-export 'src/commands/macos/dscl.dart';
-export 'src/commands/macos/launchctl.dart';
-export 'src/commands/macos/networksetup.dart';
-export 'src/commands/macos/plutil.dart';
-export 'src/commands/macos/pmset.dart';
-export 'src/commands/macos/scutil.dart';
-export 'src/commands/macos/security.dart';
-export 'src/commands/macos/softwareupdate.dart';
-export 'src/commands/unix/awk.dart';
-export 'src/commands/unix/bash.dart';
-export 'src/commands/unix/chmod.dart';
-export 'src/commands/unix/chown.dart';
-export 'src/commands/unix/cp.dart';
-export 'src/commands/unix/du.dart';
-export 'src/commands/unix/find.dart';
-export 'src/commands/unix/grep.dart';
-export 'src/commands/unix/install.dart';
-export 'src/commands/unix/kill.dart';
-export 'src/commands/unix/ln.dart';
-export 'src/commands/unix/lsof.dart';
-export 'src/commands/unix/mkdir.dart';
-export 'src/commands/unix/ps.dart';
-export 'src/commands/unix/rm.dart';
-export 'src/commands/unix/sed.dart';
-export 'src/commands/unix/sh.dart';
-export 'src/commands/unix/tee.dart';
-export 'src/commands/unix/xargs.dart';
-export 'src/commands/windows/cmd.dart';
-export 'src/commands/windows/icacls.dart';
-export 'src/commands/windows/netsh.dart';
-export 'src/commands/windows/powershell.dart';
-export 'src/commands/windows/reg.dart';
-export 'src/commands/windows/robocopy.dart';
-export 'src/commands/windows/sc.dart';
-export 'src/commands/windows/schtasks.dart';
-export 'src/commands/windows/taskkill.dart';
-export 'src/commands/windows/tasklist.dart';
+export 'src/commands/common/archives/tar.dart';
+export 'src/commands/common/containers/docker.dart';
+export 'src/commands/common/containers/docker_compose.dart';
+export 'src/commands/common/databases/pg_dump.dart';
+export 'src/commands/common/databases/pg_restore.dart';
+export 'src/commands/common/databases/psql.dart';
+export 'src/commands/common/env/direnv.dart';
+export 'src/commands/common/infrastructure/tofu.dart';
+export 'src/commands/common/network/curl.dart';
+export 'src/commands/common/network/jq.dart';
+export 'src/commands/common/remote/scp.dart';
+export 'src/commands/common/remote/ssh.dart';
+export 'src/commands/common/remote/ssh_keygen.dart';
+export 'src/commands/common/runtimes/bun.dart';
+export 'src/commands/common/runtimes/deno.dart';
+export 'src/commands/common/runtimes/npm.dart';
+export 'src/commands/common/runtimes/python3.dart';
+export 'src/commands/common/security/openssl.dart';
+export 'src/commands/common/vcs/gh.dart';
+export 'src/commands/common/vcs/git.dart';
+export 'src/commands/linux/firewall/iptables.dart';
+export 'src/commands/linux/firewall/ufw.dart';
+export 'src/commands/linux/hardware/lscpu.dart';
+export 'src/commands/linux/hardware/nproc.dart';
+export 'src/commands/linux/networking/ip.dart';
+export 'src/commands/linux/networking/ss.dart';
+export 'src/commands/linux/networking/wg.dart';
+export 'src/commands/linux/package_managers/apk.dart';
+export 'src/commands/linux/package_managers/apt_get.dart';
+export 'src/commands/linux/package_managers/dnf.dart';
+export 'src/commands/linux/package_managers/pacman.dart';
+export 'src/commands/linux/services/journalctl.dart';
+export 'src/commands/linux/services/systemctl.dart';
+export 'src/commands/linux/system/secret_tool.dart';
+export 'src/commands/linux/system/sysctl.dart';
+export 'src/commands/linux/system/usermod.dart';
+export 'src/commands/macos/networking/networksetup.dart';
+export 'src/commands/macos/networking/scutil.dart';
+export 'src/commands/macos/package_managers/brew.dart';
+export 'src/commands/macos/power/caffeinate.dart';
+export 'src/commands/macos/power/pmset.dart';
+export 'src/commands/macos/services/launchctl.dart';
+export 'src/commands/macos/storage/diskutil.dart';
+export 'src/commands/macos/system/defaults.dart';
+export 'src/commands/macos/system/dscl.dart';
+export 'src/commands/macos/system/plutil.dart';
+export 'src/commands/macos/system/security.dart';
+export 'src/commands/macos/system/softwareupdate.dart';
+export 'src/commands/macos/system/sysctl.dart';
+export 'src/commands/unix/filesystem/cp.dart';
+export 'src/commands/unix/filesystem/du.dart';
+export 'src/commands/unix/filesystem/find.dart';
+export 'src/commands/unix/filesystem/install.dart';
+export 'src/commands/unix/filesystem/ln.dart';
+export 'src/commands/unix/filesystem/mkdir.dart';
+export 'src/commands/unix/filesystem/rm.dart';
+export 'src/commands/unix/permissions/chmod.dart';
+export 'src/commands/unix/permissions/chown.dart';
+export 'src/commands/unix/pipeline/tee.dart';
+export 'src/commands/unix/pipeline/xargs.dart';
+export 'src/commands/unix/process/kill.dart';
+export 'src/commands/unix/process/lsof.dart';
+export 'src/commands/unix/process/ps.dart';
+export 'src/commands/unix/shell/bash.dart';
+export 'src/commands/unix/shell/sh.dart';
+export 'src/commands/unix/text/awk.dart';
+export 'src/commands/unix/text/grep.dart';
+export 'src/commands/unix/text/sed.dart';
+export 'src/commands/unix/transfer/rsync.dart';
+export 'src/commands/windows/filesystem/robocopy.dart';
+export 'src/commands/windows/networking/netsh.dart';
+export 'src/commands/windows/package_managers/scoop.dart';
+export 'src/commands/windows/package_managers/winget.dart';
+export 'src/commands/windows/permissions/icacls.dart';
+export 'src/commands/windows/process/taskkill.dart';
+export 'src/commands/windows/process/tasklist.dart';
+export 'src/commands/windows/registry/reg.dart';
+export 'src/commands/windows/services/sc.dart';
+export 'src/commands/windows/services/schtasks.dart';
+export 'src/commands/windows/shell/cmd.dart';
+export 'src/commands/windows/shell/powershell.dart';
 export 'src/exception.dart';
 export 'src/process.dart';
 export 'src/result.dart';

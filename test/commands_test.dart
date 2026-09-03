@@ -1,31 +1,38 @@
 // Copyright (C) 2026 Fiber
 //
-// All rights reserved. This script, including its code and logic, is the
-// exclusive property of Fiber. Redistribution, reproduction,
-// or modification of any part of this script is strictly prohibited
-// without prior written permission from Fiber.
+// This Source Code Form is subject to the terms of the Mozilla Public License,
+// v. 2.0. If a copy of the MPL was not distributed with this file, You can
+// obtain one at https://mozilla.org/MPL/2.0/.
 //
-// Conditions of use:
-// - The code may not be copied, duplicated, or used, in whole or in part,
-//   for any purpose without explicit authorization.
-// - Redistribution of this code, with or without modification, is not
-//   permitted unless expressly agreed upon by Fiber.
-// - The name "Fiber" and any associated branding, logos, or
-//   trademarks may not be used to endorse or promote derived products
-//   or services without prior written approval.
+// What you may do:
+// - Use this software for any purpose, including commercially, and build and
+//   sell your own products on top of it.
+// - Change it, and create new works based on it.
+// - Distribute copies of it, with or without your changes.
+// - Combine it with files under any other licence, proprietary ones included,
+//   and licence that larger work on your own terms.
+//
+// What you must do in return:
+// - Keep this notice on every file you received it on.
+// - Publish, under these same terms, the source of every file covered by them
+//   that you distribute, including the ones you changed, so that whoever
+//   receives your version can obtain that source.
+// - Leave Fiber out of it: the name "Fiber", its branding, its logos and its
+//   trademarks may not be used to endorse or promote what you build, and this
+//   licence grants no right to them.
 //
 // Disclaimer:
-// THIS SCRIPT AND ITS CODE ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL
-// FIBER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF USE,
-// DATA, PROFITS, OR BUSINESS INTERRUPTION) ARISING OUT OF OR RELATED TO THE USE
-// OR INABILITY TO USE THIS SCRIPT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// AS FAR AS THE LAW ALLOWS, THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY
+// OR CONDITION OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+// NON-INFRINGEMENT. IN NO EVENT SHALL FIBER BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT
+// LIMITED TO LOSS OF USE, DATA, PROFITS, OR BUSINESS INTERRUPTION) ARISING OUT
+// OF OR RELATED TO THESE TERMS OR THE USE OR NATURE OF THE SOFTWARE, UNDER ANY
+// KIND OF LEGAL CLAIM.
 //
-// Unauthorized copying or reproduction of this script, in whole or in part,
-// is a violation of applicable intellectual property laws and will result
-// in legal action.
+// This header is a summary written for convenience. Where it differs from the
+// LICENSE file, the LICENSE file governs.
 
 import 'package:fiber_shell/fiber_shell.dart';
 import 'package:test/test.dart';
@@ -58,6 +65,18 @@ void main() {
     test('deno renders a comma-separated permission list as one argument', () {
       expect(Deno.allowReadPaths(<String>['/etc', '/var']).args, contains('--allow-read=/etc,/var'));
     });
+
+    test('bun run takes its flags before the script it runs', () {
+      expect(Bun.run().hot().arg('index.ts').line, 'bun run --hot index.ts');
+    });
+
+    test('gh keeps the subcommand chain ahead of its own flags', () {
+      expect(Gh.pr().list().state('open').limit(5).line, 'gh pr list --state open --limit 5');
+    });
+
+    test('tofu renders single-dash flags, the grammar OpenTofu expects', () {
+      expect(Tofu.plan().noInput().noColor().line, 'tofu plan -input=false -no-color');
+    });
   });
 
   group('unix', () {
@@ -84,6 +103,13 @@ void main() {
     test('sh reads its program from the next argument', () {
       expect(Sh.c().script('echo hi').args, <String>['-c', 'echo hi']);
     });
+
+    test('rsync takes the source before the destination, after its flags', () {
+      expect(
+        Rsync.archive().delete().source('/a/').destination('host:/b/').line,
+        'rsync --archive --delete /a/ host:/b/',
+      );
+    });
   });
 
   group('linux', () {
@@ -94,11 +120,39 @@ void main() {
     test('ufw mirrors the English rule grammar', () {
       expect(Ufw.allow().arg('443/tcp').line, 'ufw allow 443/tcp');
     });
+
+    test('nproc takes a single flag and nothing else', () {
+      expect(Nproc.all().line, 'nproc --all');
+    });
+
+    test('lscpu joins a column list into one --parse argument', () {
+      expect(Lscpu.parse(columns: <String>['Core', 'Socket']).line, 'lscpu --parse=Core,Socket');
+    });
+
+    test('dnf answers yes to every prompt before naming the package', () {
+      expect(Dnf.install().assumeYes().arg('docker-ce').line, 'dnf install --assumeyes docker-ce');
+    });
+
+    test('pacman repeats -S for a full system upgrade', () {
+      expect(Pacman.sync().refresh().sysupgrade().line, 'pacman -S --refresh --sysupgrade');
+    });
+
+    test('apk adds a package by name', () {
+      expect(Apk.add().arg('curl').line, 'apk add curl');
+    });
   });
 
   group('macos', () {
     test('launchctl renders a modern verb', () {
       expect(Launchctl.printTarget().line, 'launchctl print');
+    });
+
+    test('the Darwin sysctl reads a value by name, unlike the Linux one', () {
+      expect(DarwinSysctl.valuesOnly().arg('hw.physicalcpu').line, 'sysctl -n hw.physicalcpu');
+    });
+
+    test('brew installs a formula or cask by name', () {
+      expect(Brew.install().arg('wget').line, 'brew install wget');
     });
   });
 
@@ -109,6 +163,14 @@ void main() {
 
     test('a Windows wrapper renders the same from any platform', () {
       expect(Tasklist.line, 'tasklist');
+    });
+
+    test('winget installs by exact identifier match', () {
+      expect(Winget.install().exact().id('Git.Git').line, 'winget install --exact --id Git.Git');
+    });
+
+    test('scoop installs an app at machine scope', () {
+      expect(Scoop.install().global().arg('git').line, 'scoop install --global git');
     });
   });
 

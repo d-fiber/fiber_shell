@@ -165,15 +165,48 @@ build a shell command out of it.
 
 ## The catalogue
 
-Wrappers are grouped by where the tool exists. It grows as needs come up.
+Wrappers are grouped first by where the tool exists, then by what family of
+job it does. It grows as needs come up.
 
-| Group | Tools |
-|-------|-------|
-| `common/` | curl, deno, direnv, docker, docker compose, git, jq, npm, openssl, pg_dump, pg_restore, psql, python3, scp, ssh, ssh-keygen, tar |
-| `unix/` | awk, bash, chmod, chown, cp, du, find, grep, install, kill, ln, lsof, mkdir, ps, rm, sed, sh, tee, xargs |
-| `linux/` | apt-get, ip, iptables, journalctl, secret-tool, ss, sysctl, systemctl, ufw, usermod, wg |
-| `macos/` | caffeinate, defaults, diskutil, dscl, launchctl, networksetup, plutil, pmset, scutil, security, softwareupdate |
-| `windows/` | cmd, icacls, netsh, powershell, reg, robocopy, sc, schtasks, taskkill, tasklist |
+| Group | Family | Tools |
+|-------|--------|-------|
+| `common/` | `archives/` | tar |
+| `common/` | `containers/` | docker, docker compose |
+| `common/` | `databases/` | pg_dump, pg_restore, psql |
+| `common/` | `env/` | direnv |
+| `common/` | `infrastructure/` | tofu |
+| `common/` | `network/` | curl, jq |
+| `common/` | `remote/` | scp, ssh, ssh-keygen |
+| `common/` | `runtimes/` | bun, deno, npm, python3 |
+| `common/` | `security/` | openssl |
+| `common/` | `vcs/` | gh, git |
+| `unix/` | `filesystem/` | cp, du, find, install, ln, mkdir, rm |
+| `unix/` | `permissions/` | chmod, chown |
+| `unix/` | `pipeline/` | tee, xargs |
+| `unix/` | `process/` | kill, lsof, ps |
+| `unix/` | `shell/` | bash, sh |
+| `unix/` | `text/` | awk, grep, sed |
+| `unix/` | `transfer/` | rsync |
+| `linux/` | `firewall/` | iptables, ufw |
+| `linux/` | `hardware/` | lscpu, nproc |
+| `linux/` | `networking/` | ip, ss, wg |
+| `linux/` | `package_managers/` | apk, apt-get, dnf, pacman |
+| `linux/` | `services/` | journalctl, systemctl |
+| `linux/` | `system/` | secret-tool, sysctl, usermod |
+| `macos/` | `networking/` | networksetup, scutil |
+| `macos/` | `package_managers/` | brew |
+| `macos/` | `power/` | caffeinate, pmset |
+| `macos/` | `services/` | launchctl |
+| `macos/` | `storage/` | diskutil |
+| `macos/` | `system/` | defaults, dscl, plutil, security, softwareupdate, sysctl |
+| `windows/` | `filesystem/` | robocopy |
+| `windows/` | `networking/` | netsh |
+| `windows/` | `package_managers/` | scoop, winget |
+| `windows/` | `permissions/` | icacls |
+| `windows/` | `process/` | taskkill, tasklist |
+| `windows/` | `registry/` | reg |
+| `windows/` | `services/` | sc, schtasks |
+| `windows/` | `shell/` | cmd, powershell |
 
 Every wrapper carries its own documentation: the traps of the tool, which
 platform it exists on, and which options bite in automation. Read the class
@@ -293,7 +326,10 @@ dart run build_runner build
 
 ## Contributing a wrapper
 
-1. Add `lib/src/commands/<group>/<tool>.dart`, following the shape above.
+1. Add `lib/src/commands/<group>/<family>/<tool>.dart`, following the shape
+   above. Reuse an existing family when the tool fits one, in `## The
+   catalogue` below; open a new family folder rather than stretch one whose
+   name would no longer describe every tool in it.
 2. Document the class: what the tool is, where it exists, and what bites in
    automation. That comment is the reason the wrapper is worth more than a raw
    `Process.start`.
