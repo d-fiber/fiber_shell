@@ -3,7 +3,7 @@ description: >-
   Typed shell command builder for Dart and Flutter desktop: CLI tools wrapped as
   classes, with pipes, chaining and elevation run in Dart instead of through a
   shell.
-version: 1.3.0
+version: 1.3.1
 homepage: https://github.com/d-fiber/fiber_shell
 repository: https://github.com/d-fiber/fiber_shell
 

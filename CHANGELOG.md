@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- No changes.
+
 ## 1.2.0
 
 - Fifty new wrappers, ten per platform group:
