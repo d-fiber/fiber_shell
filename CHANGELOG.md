@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.4.0
+
+- Fifty more wrappers, ten per platform group:
+  - `common/`: `Age` (`age`), `Aws` (`aws`), `Az` (`az`), `Gcloud` (`gcloud`),
+    `Go` (`go`), `Packer` (`packer`), `Redis` (`redis-cli`), `Ruby` (`ruby`),
+    `Sqlite3` (`sqlite3`), `Vault` (`vault`) — `cloud/` is a new family.
+  - `unix/`: `Basename`, `Date`, `Dirname`, `Env`, `Nc`, `Nohup`, `Printf`,
+    `Readlink`, `Stat`, `Top` — `network/` is a new family, `date` joins
+    `system/`.
+  - `linux/`: `Blkid`, `Chroot`, `Ethtool`, `Fdisk`, `Loginctl`, `Nsenter`,
+    `Setenforce`, `Tcpdump`, `Timedatectl`, `Unshare` — `namespaces/` and
+    `security/` are new families.
+  - `macos/`: `Csrutil`, `Hdiutil`, `Ioreg`, `Pbcopy`, `Pbpaste`, `Profiles`,
+    `Qlmanage`, `Say`, `Screencapture`, `SwVers` — `clipboard/` and `media/`
+    are new families.
+  - `windows/`: `Bcdedit`, `Chkdsk`, `Diskpart`, `Dism`, `Fsutil`, `Gpresult`,
+    `Gpupdate`, `Sfc`, `Takeown`, `Wusa` — `storage/` and `policy/` are new
+    families.
+- As before, every option was sourced from a man page, `--help` output, or
+  official docs rather than guessed at. `Dism`, `Ethtool`, `Aws`, `Gcloud`,
+  `Az` and `Vault` in particular carry a generic escape-hatch method
+  alongside their dedicated ones, for the tail of subcommand-specific flags
+  too deep to enumerate exhaustively — the same pattern `Certutil` already
+  used in 1.2.0.
+
 ## 1.3.1
 
 - No changes.
