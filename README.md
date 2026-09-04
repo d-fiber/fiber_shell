@@ -171,60 +171,69 @@ job it does. It grows as needs come up.
 | Group | Family | Tools |
 |-------|--------|-------|
 | `common/` | `archives/` | tar |
+| `common/` | `cloud/` | aws, az, gcloud |
 | `common/` | `containers/` | docker, docker compose, helm, kubectl |
-| `common/` | `databases/` | mysql, pg_dump, pg_restore, psql |
+| `common/` | `databases/` | mysql, pg_dump, pg_restore, psql, redis-cli, sqlite3 |
 | `common/` | `env/` | direnv |
-| `common/` | `infrastructure/` | ansible-playbook, terraform, tofu |
+| `common/` | `infrastructure/` | ansible-playbook, packer, terraform, tofu |
 | `common/` | `network/` | curl, jq, wget, yq |
 | `common/` | `remote/` | scp, ssh, ssh-keygen |
-| `common/` | `runtimes/` | bun, deno, node, npm, pip, python3 |
-| `common/` | `security/` | gpg, openssl |
+| `common/` | `runtimes/` | bun, deno, go, node, npm, pip, python3, ruby |
+| `common/` | `security/` | age, gpg, openssl, vault |
 | `common/` | `vcs/` | gh, git |
-| `unix/` | `filesystem/` | cp, du, find, install, ln, mkdir, rm, touch |
+| `unix/` | `filesystem/` | basename, cp, dirname, du, find, install, ln, mkdir, readlink, rm, stat, touch |
+| `unix/` | `network/` | nc |
 | `unix/` | `permissions/` | chmod, chown |
 | `unix/` | `pipeline/` | tee, xargs |
-| `unix/` | `process/` | kill, lsof, ps |
-| `unix/` | `shell/` | bash, sh |
-| `unix/` | `system/` | df, uptime |
-| `unix/` | `text/` | awk, cat, diff, grep, head, sed, sort, tail, uniq, wc |
+| `unix/` | `process/` | kill, lsof, nohup, ps, top |
+| `unix/` | `shell/` | bash, env, sh |
+| `unix/` | `system/` | date, df, uptime |
+| `unix/` | `text/` | awk, cat, diff, grep, head, printf, sed, sort, tail, uniq, wc |
 | `unix/` | `transfer/` | rsync |
 | `linux/` | `firewall/` | iptables, ufw |
 | `linux/` | `hardware/` | free, lscpu, nproc |
 | `linux/` | `kernel/` | dmesg, lsmod, modprobe |
-| `linux/` | `networking/` | ip, nmcli, ss, wg |
+| `linux/` | `namespaces/` | chroot, nsenter, unshare |
+| `linux/` | `networking/` | ethtool, ip, nmcli, ss, tcpdump, wg |
 | `linux/` | `package_managers/` | apk, apt-get, dnf, pacman |
-| `linux/` | `services/` | crontab, journalctl, systemctl |
-| `linux/` | `storage/` | lsblk, mount |
+| `linux/` | `security/` | setenforce |
+| `linux/` | `services/` | crontab, journalctl, loginctl, systemctl, timedatectl |
+| `linux/` | `storage/` | blkid, fdisk, lsblk, mount |
 | `linux/` | `system/` | groupadd, secret-tool, sysctl, useradd, usermod |
 | `macos/` | `apps/` | open |
 | `macos/` | `automation/` | osascript |
-| `macos/` | `developer/` | xcode-select, xcrun |
+| `macos/` | `clipboard/` | pbcopy, pbpaste |
+| `macos/` | `developer/` | qlmanage, xcode-select, xcrun |
+| `macos/` | `media/` | say, screencapture |
 | `macos/` | `networking/` | networksetup, scutil |
 | `macos/` | `package_managers/` | brew |
 | `macos/` | `power/` | caffeinate, pmset |
 | `macos/` | `search/` | mdfind, mdls |
-| `macos/` | `security/` | codesign |
+| `macos/` | `security/` | codesign, csrutil |
 | `macos/` | `services/` | launchctl |
-| `macos/` | `storage/` | diskutil, tmutil |
-| `macos/` | `system/` | defaults, dscl, plutil, security, softwareupdate, spctl, sysctl, system_profiler |
+| `macos/` | `storage/` | diskutil, hdiutil, tmutil |
+| `macos/` | `system/` | defaults, dscl, ioreg, plutil, profiles, security, softwareupdate, spctl, sw_vers, sysctl, system_profiler |
 | `windows/` | `eventlog/` | wevtutil |
 | `windows/` | `filesystem/` | attrib, robocopy, xcopy |
 | `windows/` | `networking/` | ipconfig, netsh, netstat |
 | `windows/` | `package_managers/` | scoop, winget |
-| `windows/` | `permissions/` | icacls |
+| `windows/` | `permissions/` | icacls, takeown |
+| `windows/` | `policy/` | gpresult, gpupdate |
 | `windows/` | `power/` | shutdown |
 | `windows/` | `process/` | taskkill, tasklist |
 | `windows/` | `registry/` | reg |
 | `windows/` | `security/` | certutil |
 | `windows/` | `services/` | sc, schtasks |
 | `windows/` | `shell/` | cmd, powershell |
-| `windows/` | `system/` | driverquery, systeminfo, whoami |
+| `windows/` | `storage/` | chkdsk, diskpart, fsutil |
+| `windows/` | `system/` | bcdedit, dism, driverquery, sfc, systeminfo, whoami, wusa |
 
 Every wrapper carries its own documentation: the traps of the tool, which
 platform it exists on, and which options bite in automation. Read the class
 comment before reaching for a flag: `security`, `dscl`, `netsh`, `launchctl`,
-`shutdown`, `attrib`, `certutil` and `wevtutil` in particular have surprises
-worth knowing about first.
+`shutdown`, `attrib`, `certutil`, `wevtutil`, `chkdsk`, `diskpart`, `dism`,
+`bcdedit` and `csrutil` in particular have surprises worth knowing about
+first.
 
 Two helpers for the tools that may not be there at all:
 
